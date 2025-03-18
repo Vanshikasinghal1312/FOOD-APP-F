@@ -1,74 +1,85 @@
-import { Image, StyleSheet, Platform } from 'react-native';
+import {Text, View, StyleSheet, ImageBackground} from 'react-native'
+import { StatusBar } from 'expo-status-bar'
+import CategoryScreen from '../../Screens/CategoryScreen'
+import { NavigationContainer } from '@react-navigation/native'
+import {createNativeStackNavigator} from '@react-navigation/native-stack'
+// import MealOverview from '../../Screens/MealOverviewScreen'
+import MealsOverviewScreen from '../../Screens/MealOverviewScreen'
+import MealDetailScreen from '../../Screens/MealsDetailScreen'
+import Favourite from '../../Screens/favourite'
+import { createDrawerNavigator } from '@react-navigation/drawer';
+import Entypo from '@expo/vector-icons/Entypo';
+// import FavouriteContextProvider from '../../store/Context/context-api'
+import FavouriteScreen from '../../Store/Context/Favourite'
 
-import { HelloWave } from '@/components/HelloWave';
-import ParallaxScrollView from '@/components/ParallaxScrollView';
-import { ThemedText } from '@/components/ThemedText';
-import { ThemedView } from '@/components/ThemedView';
+import TTabnavigation from '../../Screens/favourite'
+import {Provider} from 'react-redux'
+import { store } from '../../Store/Redux/Store'
 
-export default function HomeScreen() {
-  return (
-    <ParallaxScrollView
-      headerBackgroundColor={{ light: '#A1CEDC', dark: '#1D3D47' }}
-      headerImage={
-        <Image
-          source={require('@/assets/images/partial-react-logo.png')}
-          style={styles.reactLogo}
-        />
-      }>
-      <ThemedView style={styles.titleContainer}>
-        <ThemedText type="title">Welcome!</ThemedText>
-        <HelloWave />
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 1: Try it</ThemedText>
-        <ThemedText>
-          Edit <ThemedText type="defaultSemiBold">app/(tabs)/index.tsx</ThemedText> to see changes.
-          Press{' '}
-          <ThemedText type="defaultSemiBold">
-            {Platform.select({
-              ios: 'cmd + d',
-              android: 'cmd + m',
-              web: 'F12'
-            })}
-          </ThemedText>{' '}
-          to open developer tools.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 2: Explore</ThemedText>
-        <ThemedText>
-          Tap the Explore tab to learn more about what's included in this starter app.
-        </ThemedText>
-      </ThemedView>
-      <ThemedView style={styles.stepContainer}>
-        <ThemedText type="subtitle">Step 3: Get a fresh start</ThemedText>
-        <ThemedText>
-          When you're ready, run{' '}
-          <ThemedText type="defaultSemiBold">npm run reset-project</ThemedText> to get a fresh{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> directory. This will move the current{' '}
-          <ThemedText type="defaultSemiBold">app</ThemedText> to{' '}
-          <ThemedText type="defaultSemiBold">app-example</ThemedText>.
-        </ThemedText>
-      </ThemedView>
-    </ParallaxScrollView>
-  );
+const Stack= createNativeStackNavigator();
+const Drawer= createDrawerNavigator();
+
+function DrawerHandler(){
+    return (
+    <Drawer.Navigator >
+        <Drawer.Screen name='MealCategory'  component={CategoryScreen} options={{
+                title:'Meal Categories', 
+                 drawerActiveTintColor:'brown',
+                 drawerActiveBackgroundColor:'orange',
+                 drawerInactiveBackgroundColor:'white',
+                 drawerInactiveTintColor:'black',
+                 headerStyle:{backgroundColor:'orange'}, 
+                 headerTintColor:'brown', 
+                 drawerIcon:()=>(<Entypo name="align-right" size={24} color="red" />)
+                }}/>
+                <Drawer.Screen name='Favourite'  component={FavouriteScreen} options={{
+                title:'Favourites', 
+                 drawerActiveTintColor:'brown',
+                 drawerActiveBackgroundColor:'orange',
+                 drawerInactiveBackgroundColor:'white',
+                 drawerInactiveTintColor:'black',
+                 headerStyle:{backgroundColor:'orange'}, 
+                 headerTintColor:'brown', 
+                 drawerIcon:()=>(<Entypo name="align-right" size={24} color="red" />)
+                }}/>
+                <Drawer.Screen name='TTabnavigation'  component={TTabnavigation} options={{
+                title:'TTabnavigation', 
+                 drawerActiveTintColor:'brown',
+                 drawerActiveBackgroundColor:'orange',
+                 drawerInactiveBackgroundColor:'white',
+                 drawerInactiveTintColor:'black',
+                 headerStyle:{backgroundColor:'orange'}, 
+                 headerTintColor:'brown', 
+                 drawerIcon:()=>(<Entypo name="align-right" size={24} color="red" />)
+                }}/>
+        
+    </Drawer.Navigator>
+    )
+}
+export default function App(){
+    return(
+        <Provider store={store}>
+        {/* //<FavouriteContextProvider> */}
+        <Stack.Navigator screenOptions={{headerStyle:{backgroundColor:'brown'}, 
+        headerTintColor:'white', 
+        contentStyle:{backgroundColor:'grey'}}} >
+            <Stack.Screen name= "drawer"  component={DrawerHandler} options={{headerShown:false}}/>
+            <Stack.Screen name= "MealCategory"  component={CategoryScreen} options={{
+                title:'All Categories', 
+                }}/>   
+            <Stack.Screen name= "MealsOverviewScreen" component={MealsOverviewScreen}/>   
+            <Stack.Screen name= "MealDetailScreen" component={MealDetailScreen}/>   
+
+        </Stack.Navigator>
+       
+        {/* // </FavouriteContextProvider> */}
+        </Provider>
+    )
 }
 
-const styles = StyleSheet.create({
-  titleContainer: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    gap: 8,
-  },
-  stepContainer: {
-    gap: 8,
-    marginBottom: 8,
-  },
-  reactLogo: {
-    height: 178,
-    width: 290,
-    bottom: 0,
-    left: 0,
-    position: 'absolute',
-  },
-});
+const styles= StyleSheet.create({
+    container:{        
+        backgroundColor:'black',
+        flex:1
+    }
+})
